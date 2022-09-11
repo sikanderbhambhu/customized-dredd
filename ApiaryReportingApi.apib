@@ -1,0 +1,359 @@
+FORMAT: 1A
+HOST: http://api.apiary.io/
+
+
+# Apiary Test Reporting API
+
+[Dredd](http://dredd.org/) uses the Test Reporting API to send test reports to
+Apiary using the [Apiary Reporter](http://dredd.org/en/latest/how-to-guides.html#using-apiary-reporter-and-apiary-tests).
+
+Each **test report** consists of two logical entities: a **test run** and
+one or more **test steps**. The test run is an envelope for the test report
+meta data. Each test step represents an individual test within the test report,
+i.e. one HTTP transaction Dredd performed and validated
+with [Gavel](https://github.com/apiaryio/gavel.js).
+
+
+## Group Test Reports Bound to an API Project
+
+### Test Runs [/apis/{apiProject}/tests/runs]
+
++ Parameters
+    + apiProject: exampleapi (required) - API Project Name
+
+#### Create a Test Run [POST]
+
++ Request (application/json)
+    + Headers
+
+            Authentication: Token aff888af9993db9ef70edf3c878ab521
+
+    + Attributes (Test Run)
+
++ Response 201 (application/json; charset=utf-8)
+    + Attributes (Saved Test Run)
+
+#### List Test Runs [GET]
+
++ Request
+    + Headers
+
+            Authentication: Token aff888af9993db9ef70edf3c878ab521
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (array)
+        + (Saved Test Run)
+
+### Test Run [/apis/{apiProject}/tests/run/{id}]
+
++ Parameters
+    + apiProject: exampleapi (required) - API Project Name
+    + id: 507f1f77bcf86cd799439011 (required) - unique ID of the test report
+
+#### Retrieve a Test Run [GET]
+
++ Request
+    + Headers
+
+            Authentication: Token aff888af9993db9ef70edf3c878ab521
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Saved Test Run)
+
+#### Update Test Run Attributes [PATCH]
+
++ Request (application/json)
+    + Headers
+
+            Authentication: Token aff888af9993db9ef70edf3c878ab521
+
+    + Attributes (Test Run Update)
+        + endedAt: 1381924299 (number, fixed)
+        + status: passed (fixed)
+        + result (fixed)
+            + tests: 7 (number)
+            + failures: 0 (number)
+            + passes: 7 (number)
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Saved Test Run)
+        + endedAt: 1381924299 (number, fixed)
+        + status: passed (fixed)
+        + result (fixed)
+            + tests: 7 (number)
+            + failures: 0 (number)
+            + passes: 7 (number)
+
+### Test Steps [/apis/{apiProject}/tests/steps{?testRunId}]
+
++ Parameters
+    + apiProject: exampleapi (required) - API Project Name
+    + testRunId: 507f1f77bcf86cd799439011 (required) - filter by test report ID
+
+#### Create a Test Step [POST]
+
++ Request (application/json)
+    + Headers
+
+            Authentication: Token aff888af9993db9ef70edf3c878ab521
+
+    + Attributes (Test Step)
+
++ Response 201 (application/json; charset=utf-8)
+    + Attributes (Saved Test Step)
+
+#### List Test Steps [GET]
+
++ Request
+    + Headers
+
+            Authentication: Token aff888af9993db9ef70edf3c878ab521
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (array)
+        + (Saved Test Step)
+
+### Test Step [/apis/{apiProject}/tests/step/{id}]
+
+#### Retreive a Test Step [GET]
+
++ Parameters
+    + apiProject: exampleapi (required) - API Project Name
+    + id: 508c7f79bcf86cd7994f6c0e (required) - Unique identifier of test step in Apiary
+
++ Request (application/json)
+    + Headers
+
+            Authentication: Token aff888af9993db9ef70edf3c878ab521
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Saved Test Step)
+
+## Group Anonymous Test Reports
+
+### Test Runs [/apis/public/tests/runs]
+
+#### Create a Test Run [POST]
+
++ Request (application/json)
+    + Attributes (Test Run)
+        + Include Anonymous Test Run
+
++ Response 201 (application/json; charset=utf-8)
+    + Attributes (Saved Test Run)
+        + Include Anonymous Test Run
+
+#### List Test Runs [GET]
+
++ Response 404 (application/json; charset=utf-8)
+    + Attributes
+        + error: true (boolean)
+        + message: `Listing public test runs is not allowed`
+
+### Test Run [/apis/public/tests/run/{id}]
+
++ Parameters
+    + id: 507f1f77bcf86cd799439011 (required) - unique ID of the test report
+
+#### Retrieve a Test Run [GET]
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Saved Test Run)
+        + Include Anonymous Test Run
+
+#### Update Test Run Attributes [PATCH]
+
++ Request (application/json)
+    + Attributes (Test Run Update)
+        + Include Anonymous Test Run
+        + endedAt: 1381924299 (number, fixed)
+        + status: passed (fixed)
+        + result (fixed)
+            + tests: 7 (number)
+            + failures: 0 (number)
+            + passes: 7 (number)
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Saved Test Run)
+        + Include Anonymous Test Run
+        + endedAt: 1381924299 (number, fixed)
+        + status: passed (fixed)
+        + result (fixed)
+            + tests: 7 (number)
+            + failures: 0 (number)
+            + passes: 7 (number)
+
+### Test Steps [/apis/public/tests/steps{?testRunId}]
+
++ Parameters
+    + testRunId: 507f1f77bcf86cd799439011 (required) - filter by test report ID
+
+#### Create a Test Step [POST]
+
++ Request (application/json)
+    + Attributes (Test Step)
+        + Include Anonymous Test Step
+
++ Response 201 (application/json; charset=utf-8)
+    + Attributes (Saved Test Step)
+        + Include Anonymous Test Step
+
+#### List Test Steps [GET]
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (array)
+        + (Saved Test Step)
+            + Include Anonymous Test Step
+
+### Test Step [/apis/public/tests/step/{id}]
+
+#### Retreive a Test Step [GET]
+
++ Parameters
+    + id: 508c7f79bcf86cd7994f6c0e (required) - Unique identifier of test step in Apiary
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Saved Test Step)
+        + Include Anonymous Test Step
+
+## Data Structures
+
+### Test Run
+
++ endpoint: `http://localhost:3000` (required) - protocol with hostname and optional PORT in URL format, root for all transactions in this Test Run
++ blueprints (array, required) - blueprints used for the test run
+    + (object)
+        + filename (required) - file name
+        + raw (required) - raw API description
+        + annotations (array, required) - annotations (errors and warnings) which occurred during parsing or testing
+            + (object)
+                + type (enum) - type of the annotation.
+                    + error
+                    + warning
+                + component (enum) - in which component of the compilation process the annotation occurred.
+                    + apiDescriptionParser
+                    + parametersValidation
+                    + uriTemplateExpansion
+                + code (number) - parser-specific code of the annotation.
+                + message - textual annotation. This is – in most cases – a human-readable message to be displayed to user.
+                + location (array) - locations of the annotation in the source file. A series of character-blocks, which may be non-continuous. For further details refer to API Elements' [Source Map](source-map) element.
+                    + (array, fixed) - continuous characters block. A pair of character index and character count.
+                        + (number) - zero-based index of a character in the source document.
+                        + (number) - count of characters starting from the character index.
+                + origin - object of references to nodes of [API Elements][api-elements] derived from the original API description document.
+                    + filename: `./blueprint.md`
+                    + apiName: `My Api`
+                    + resourceGroupName: `Greetings`
+                    + resourceName: `Hello, world!`
+                    + actionName: `Retrieve Message`
+                    + exampleName: `First example`
++ public: false (boolean, fixed) - true if the test report is public (anonymous)
++ anonymous: false (boolean, fixed) - true if the test report is public (anonymous)
++ logs (array) - logs from hooks
++ agent: `Dredd/0.1.7 (Linux 3.2.0-23-generic; x64)` - [user agent](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent) performing the test
++ agentRunUuid: 03b3de07-d354-4ba6-aa2e-28789b03c619 - UUID v4 generated by the user agent for test report identification
++ agentEnvironment (optional) - data about user agent's environment (CI, development, staging, production, etc.)
+    + CI: true (optional)
++ hostname: machine.fqdn.tld - hostname of computer where test run was preformed, FQDN not necessary
++ startedAt (number) - unix timestamp when the test report started, in UTC
++ createdAt (string) - date in ISO format
++ Include Test Run Update
+
+### Test Run Update
+
++ logs (array)
+    + (object)
+        + timestamp: 1381924294 (number) - unix timestamp
+        + content: log message from hooks
++ endedAt (number) - unix timestamp when the test report ended, in UTC
++ status (enum) - test report result
+    + running
+    + failed
+    + passed
++ result - test report stats
+    + tests: 7 (number)
+    + failures: 0 (number)
+    + passes: 7 (number)
+
+### Saved Test Run (Test Run)
+
++ _id: 507f1f77bcf86cd799439011 - unique object ID
++ testRunId: 507f1f77bcf86cd799439011 - unique object ID
++ reportUrl: `https://apiary.io/foo/bar/id` (required) - test reporting page URL
+
+### Anonymous Test Run
+
++ public: true (boolean, fixed)
++ anonymous: true (boolean, fixed)
+
+### Test Step
+
++ testRunId: 507f1f77bcf86cd799439011 - reference to the parent test run identificator
++ origin - origin path (position, location) of the step in the blueprint AST
+    + filename: ./apiary.apib - file name of original blueprint
+    + resourceGroupName: Machines - group name
+    + resourceName: Machines Collection - resource name
+    + actionName: Create a Machine - action name
+    + exampleName: Example 1 - example name
++ duration: 12.345 (number) - test duration in seconds
++ result (enum) - result of step execution
+    + skip
+    + pass
+    + fail
++ results - data from step execution
+    + request (HTTP Request) - input to [Gavel](https://github.com/apiaryio/gavel.js)
+    + actualResponse (Actual HTTP Response) - input to [Gavel](https://github.com/apiaryio/gavel.js)
+    + expectedResponse (Expected HTTP Response) - input to [Gavel](https://github.com/apiaryio/gavel.js)
+    + validationResult (Validation Result) - [Gavel](https://github.com/apiaryio/gavel.js) output
+    + errors (array) - errors related to the testing itself
+        + (object)
+            + message - error message
++ stepType: exampleTransaction - type of the step, should be HTTP or Cucumber for instance
++ anonymous: false (boolean, fixed) - true if the test report is public (anonymous)
+
+### Saved Test Step (Test Step)
+
++ _id: 507c7f79bcf86cd7994f6c0e - unique object ID
+
+### Anonymous Test Step
+
++ anonymous: true (boolean, fixed)
+
+### Validation Result
+
++ valid: true (boolean)
++ fields
+    + *statusCode*
+        + valid: true (boolean)
+        + kind: text (enum, nullable)
+            + text
+            + json
+        + values
+            + expected: 200 (enum[string, object, number])
+            + actual: 200 (enum[string, object, number])
+        + errors (array)
+            + (object)
+                + message: Missing property '/prop'
+                + location
+                    + pointer: /prop
+                    + property (array)
+                        + prop
+
+### HTTP Request
+
++ uri: /
++ method: GET
++ headers
+    + *content-type*: application/json
++ body: `{\"message\": \"Hello World!\"}`
+
+### Actual HTTP Response
+
++ statusCode: 200 (string)
++ headers
+    + *content-type*: application/json
++ body: `{\"message\": \"Hello World!\"}`
+
+### Expected HTTP Response (Actual HTTP Response)
+
++ bodySchema (string)
